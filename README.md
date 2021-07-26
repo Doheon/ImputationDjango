@@ -10,13 +10,15 @@ python manage.py runserver
 
 
 
-
+실행 화면
 
 ![webDemo](README.assets/webDemo.gif)
 
 
 
 
+
+실행 결과
 
 ![output](README.assets/output.png)
 
