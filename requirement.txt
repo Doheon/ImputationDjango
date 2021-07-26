@@ -1,0 +1,7 @@
+django
+matplotlib
+numpy
+pandas
+sklearn
+torch
+tqdm
