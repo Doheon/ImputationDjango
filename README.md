@@ -9,7 +9,6 @@ chart.js를 사용하여 보간되는 결과를 실시간으로 확인할 수 �
 
 
 ```
-cd webDemo
 pip install -r requirement.txt
 python manage.py runserver
 ```
