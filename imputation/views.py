@@ -115,7 +115,8 @@ def save(request):
     model, method = getModel(uid)
     result_df = model.df.copy()
     result = model.predict_result()
-    result = model.scaler.inverse_transform(result.reshape(-1,1)).squeeze()
+    if method == "NAOMI":
+        result = model.scaler.inverse_transform(result.reshape(-1,1)).squeeze()
     result_df["value"] = result
     src = "media/result_" + uid + ".csv"
     result_df.to_csv(src)
