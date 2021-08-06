@@ -4,7 +4,6 @@
 <html>
     <head>
         <title>Time Series Processer</title>
-        <!-- <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}"> -->
         <link
             rel="stylesheet"
             href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
@@ -45,8 +44,17 @@
                             </button>
                         </div>
 
+                        <div class="form-group" style="margin-top: 20px">
+                            <label for="sel1">학습 방법</label>
+                            <select class="form-control" id="sel1" onchange="changeMenu()">
+                                <option>Auto</option>
+                                <option>NAOMI</option>
+                                <option>BRITS</option>
+                            </select>
+                        </div>
+
                         <div class="buttons" style="margin-top: 20px">
-                            <div style="margin: 5px">
+                            <div id="trainEpoch" style="margin: 5px">
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend" style="width: 50%">
                                         <span
@@ -69,7 +77,7 @@
                                         name="epoch"
                                     />
                                 </div>
-                                <div class="input-group mb-3">
+                                <div id="ws" class="input-group mb-3" style="display: none">
                                     <div class="input-group-prepend" style="width: 50%">
                                         <span
                                             class="input-group-text"
@@ -93,18 +101,25 @@
                             </div>
                             <button
                                 id="imputation"
-                                onclick="imputation($('#epoch').val(), $('#windowsize').val());"
+                                onclick="imputation();"
                                 class="btn btn-info"
                                 style="width: 230px; margin: 5px"
                             >
                                 보간
                             </button>
                             <button
-                                onclick="downloadDemo()"
+                                onclick="downloadDemo(1)"
                                 class="btn btn-info"
-                                style="width: 230px; margin-top: 35px"
+                                style="width: 100px; margin: 5px; margin-top: 35px"
                             >
-                                테스트 파일 다운로드
+                                test file1
+                            </button>
+                            <button
+                                onclick="downloadDemo(2)"
+                                class="btn btn-info"
+                                style="width: 100px; margin: 5px; margin-top: 35px"
+                            >
+                                test file2
                             </button>
                         </div>
                     </div>
@@ -184,9 +199,17 @@
                                         {
                                             label: "Time Series",
                                             data: data,
-                                            borderColor: "rgba(255, 99, 132,1)",
+                                            borderColor: "rgba(150, 150, 150,1)",
                                             pointRadius: 0.0,
-                                            borderWidth: 1,
+                                            borderWidth: 1.2,
+                                            order: 1,
+                                        },
+                                        {
+                                            data: [],
+                                            borderColor: "rgba(255, 99, 132)",
+                                            pointRadius: 0.0,
+                                            borderWidth: 0.8,
+                                            order: 10,
                                         },
                                     ],
                                 },
@@ -222,8 +245,8 @@
                             imputeChart.update();
                             visualChart.update();
 
-                            function draw(chart, label, data) {
-                                chart.data.datasets[0].data = data;
+                            function draw(chart, label, data, index) {
+                                chart.data.datasets[index].data = data;
                                 chart.data.labels = label;
                                 chart.update();
                             }
@@ -240,9 +263,37 @@
 
         <script>
             var uid;
+            function getParam(sname) {
+                var params = location.search.substr(location.search.indexOf("?") + 1);
+                var sval = "";
+                params = params.split("&");
+                for (var i = 0; i < params.length; i++) {
+                    temp = params[i].split("=");
+                    if ([temp[0]] == sname) {
+                        sval = temp[1];
+                    }
+                }
+                return sval;
+            }
+
             $(document).ready(function () {
                 uid = Math.random().toString(36).substr(2, 16);
+                method = getParam("method");
+                console.log(method);
+                if (method != "") {
+                    $("#sel1").val(method);
+                }
+                if (method == "NAOMI") {
+                    $("#ws").css("display", "");
+                } else {
+                    $("#ws").css("display", "none");
+                }
             });
+
+            function changeMenu() {
+                method = $("#sel1").val();
+                location.href = "?method=" + method;
+            }
 
             $(window).on("beforeunload", function () {
                 var form = new FormData();
@@ -268,9 +319,10 @@
                 });
             });
 
-            function downloadDemo() {
+            function downloadDemo(num) {
                 var link = document.createElement("a");
-                link.href = "{% static 'csv/traffic_missing.csv' %}";
+                if (num == 1) link.href = "{% static 'csv/traffic_missing.csv' %}";
+                else link.href = "{% static 'csv/traffic_missing2.csv' %}";
                 link.click();
             }
 
@@ -285,7 +337,8 @@
                     processData: false,
                     contentType: false,
                     success: function (response) {
-                        draw(visualChart, response.label, response.value);
+                        draw(visualChart, response.label, response.value, 0);
+                        draw(imputeChart, response.label, response.value, 0);
                     },
                     error: function (request, status, error) {
                         console.log(
@@ -355,7 +408,7 @@
                     processData: false,
                     contentType: false,
                     success: function (response) {
-                        draw(imputeChart, response.label, response.value);
+                        draw(imputeChart, response.label, response.value, 1);
                         iter -= 1;
                         imputationR();
                     },
@@ -375,31 +428,32 @@
             }
 
             function imputation(num, windowsize) {
+                num = $("#epoch").val();
+                method = $("#sel1").val();
+                windowsize = 0;
+                if (method == "NAOMI") windowsize = $("#windowsize").val();
+
                 totalIter = parseInt(num);
                 iter = num - 1;
-
                 $("#stop").html(
                     `
-                    <button
-                                onclick="stopTrain();"
-                                class="btn btn-dark"
-                                style="width: 150px; margin: 5px"
-                            >
-                                훈련중지
-                            </button>`
+                    <button onclick="stopTrain();" class="btn btn-dark"style="width: 150px; margin: 5px">
+                        훈련중지
+                    </button>`
                 );
 
                 var form = new FormData();
                 form.append("getCSV", $("#uploadCSV")[0].files[0]);
                 form.append("windowsize", windowsize);
                 form.append("uid", uid);
+                form.append("method", method);
                 $.ajax("imputation/", {
                     method: "POST",
                     data: form,
                     processData: false,
                     contentType: false,
                     success: function (response) {
-                        draw(imputeChart, response.label, response.value);
+                        draw(imputeChart, response.label, response.value, 1);
                         imputationR();
                     },
                     error: function (request, status, error) {

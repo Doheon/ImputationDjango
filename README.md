@@ -1,6 +1,20 @@
-## NAOMI Django 
+## Time Series Imputation with Django 
 
-paper: [NAOMI: Non-AutOregressive Multiresolution sequence Imputation](https://arxiv.org/pdf/1901.10946.pdf) 
+**paper**
+
+[NAOMI: Non-AutOregressive Multiresolution sequence Imputation](https://arxiv.org/pdf/1901.10946.pdf) 
+
+[BRITS: Bidirectional Recurrent Imputation for Time Series](https://arxiv.org/pdf/1805.10572.pdf)
+
+&nbsp;
+
+**paper translate**
+
+NAOMI: <https://doheon.github.io/paper-translate/pt-NAOMI-post/>
+
+BRITS: <https://doheon.github.io/paper-translate/pt-brits-post/>
+
+
 
 위의 논문을 코드로 구현해서 시계열 데이터를 보간해주는 장고 웹 어플리 케이션을 제작했다.
 
@@ -17,13 +31,15 @@ python manage.py runserver
 
 **실행 화면**
 
-![webDemo](README.assets/webDemo.gif)
-
-
+![demo](README.assets/demo.gif)
 
 
 
 **실행 결과**
 
-![output](README.assets/output.png)
+![naomi](README.assets/naomi.PNG)
+
+
+
+![brits](README.assets/brits.PNG)
 
