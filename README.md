@@ -8,11 +8,15 @@
 
 &nbsp;
 
+
+
 **paper translate**
 
 NAOMI: <https://doheon.github.io/paper-translate/pt-NAOMI-post/>
 
 BRITS: <https://doheon.github.io/paper-translate/pt-brits-post/>
+
+&nbsp;
 
 
 
@@ -27,19 +31,31 @@ pip install -r requirement.txt
 python manage.py runserver
 ```
 
+&nbsp;
 
 
-**실행 화면**
+
+## 실행화면
 
 ![demo](README.assets/demo.gif)
 
+&nbsp;
 
 
-**실행 결과**
+
+## 실행 결과
+
+**NAOMI**
 
 ![naomi](README.assets/naomi.PNG)
 
+&nbsp;
 
+
+
+**BRITS**
 
 ![brits](README.assets/brits.PNG)
+
+&nbsp;
 
