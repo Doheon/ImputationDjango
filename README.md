@@ -10,15 +10,17 @@
 
 
 
-**paper translate**
+NAOMI: [논문번역](https://doheon.github.io/%EB%85%BC%EB%AC%B8%EB%B2%88%EC%97%AD/time-series/pt-NAOMI-post/), [코드구현](https://doheon.github.io/%EC%BD%94%EB%93%9C%EA%B5%AC%ED%98%84/time-series/ci-2.naomi-post/)
 
-NAOMI: <https://doheon.github.io/paper-translate/pt-NAOMI-post/>
-
-BRITS: <https://doheon.github.io/paper-translate/pt-brits-post/>
+BRITS: [논문번역](https://doheon.github.io/%EB%85%BC%EB%AC%B8%EB%B2%88%EC%97%AD/time-series/pt-brits-post/), [코드구현](https://doheon.github.io/%EC%BD%94%EB%93%9C%EA%B5%AC%ED%98%84/time-series/ci-1.brits-post/)
 
 &nbsp;
 
 
+
+
+
+&nbsp;
 
 위의 논문을 코드로 구현해서 시계열 데이터를 보간해주는 장고 웹 어플리 케이션을 제작했다.
 
