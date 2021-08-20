@@ -119,7 +119,7 @@ def save(request):
         result = model.scaler.inverse_transform(result.reshape(-1,1)).squeeze()
     result_df["value"] = result
     src = "media/result_" + uid + ".csv"
-    result_df.to_csv(src)
+    result_df.to_csv(src, index=False)
     dic = {"src" : src}
     return HttpResponse(json.dumps(dic), content_type = "application/json")
 
